@@ -1,57 +1,35 @@
-import React, { Component } from "react";
+import React from "react";
+import { connect } from "react-redux";
+import * as actions from "../redux/actions";
 import Counter from "./counter";
 
-class Counters extends Component {
-  // state = {
-  //   counters: [
-  //     { id: 1, value: 0 },
-  //     { id: 2, value: 0 },
-  //     { id: 3, value: 0 },
-  //     { id: 4, value: 0 }
-  //   ]
-  // };
+const Counters = ({ onResetCounter, counters }) => {
+  return (
+    <div>
+      <button className="btn btn-primary btn-sm m-2" onClick={onResetCounter}>
+        Reset
+      </button>
+      <br />
+      {counters.map(counter => (
+        <Counter key={counter.id} counter={counter} />
+      ))}
+    </div>
+  );
+};
 
-  // handleIncrement = counter => {
-  //   const localCounters = [...this.state.counters];
-  //   const index = localCounters.indexOf(counter);
-  //   localCounters[index] = { ...counter };
-  //   localCounters[index].value += 1;
-  //   this.setState({ counters: localCounters });
-  // };
+const s = state => {
+  return {
+    counters: state.counters
+  };
+};
 
-  // handleDelete = counterId => {
-  //   const localCounters = this.state.counters.filter(c => c.id !== counterId);
-  //   this.setState({ counters: localCounters });
-  // };
+const d = dispatch => {
+  return {
+    onResetCounter: () => dispatch(actions.onResetCounter())
+  };
+};
 
-  // handleReset = () => {
-  //   const localCounters = this.state.counters.map(c => {
-  //     c.value = 0;
-  //     return c;
-  //   });
-  //   this.setState({ counters: localCounters });
-  // };
-
-  render() {
-    const { onReset, onDelete, onIncrement, counters } = this.props;
-
-    return (
-      <div>
-        <button className="btn btn-primary btn-sm m-2" onClick={onReset}>
-          Reset
-        </button>
-        <br />
-        {counters.map(counter => (
-          <Counter
-            key={counter.id}
-            onIncrement={onIncrement}
-            onDelete={onDelete}
-            counter={counter}
-          />
-        ))}
-      </div>
-    );
-  }
-}
-
-export default Counters;
+export default connect(
+  s,
+  d
+)(Counters);
